@@ -13,7 +13,6 @@ void wThreadSwapContext(WThreadContext* oldContext, const WThreadContext* newCon
 	if (wThreadGetContext(oldContext) == 0) {
 		wThreadSetContext(newContext);
 	}
-	return 0;
 }
 
 void wThreadInitContext(WThreadContext* context,
@@ -22,7 +21,7 @@ void wThreadInitContext(WThreadContext* context,
 	memset(context, 0, sizeof(WThreadContext));
 
 	/** Set Stack */
-	uint64_t* sp = (uint64_t)(stack->sp) + stack->size;
+	uint64_t* sp = (uint64_t*)((uint64_t)(stack->sp) + stack->size);
 	sp = (void*)((uint64_t)sp - (uint64_t)sp % 16);	/**< 16 Bytes Align */
 	context->rsp = (uint64_t)sp;
 
@@ -30,7 +29,7 @@ void wThreadInitContext(WThreadContext* context,
 	context->rip = (uint64_t)entry;
 }
 
-int wThreadCreateStack(WThreadStack* stack, size_t size) {
+size_t wThreadCreateStack(WThreadStack* stack, size_t size) {
 	if (size < STACK_SIZE_MIN) {
 		size = STACK_SIZE_MIN;
 	}

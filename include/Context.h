@@ -10,5 +10,5 @@ extern void wThreadSwapContext(WThreadContext* oldContext, const WThreadContext*
 extern void wThreadInitContext(WThreadContext* context,
 	WThreadEntryFunc* entry, const WThreadStack* stack);
 
-extern int wThreadCreateStack(WThreadStack* stack, size_t size);
+extern size_t wThreadCreateStack(WThreadStack* stack, size_t size);
 extern void wThreadFreeStack(WThreadStack* stack);

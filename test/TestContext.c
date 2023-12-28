@@ -7,7 +7,7 @@
 static WThreadContext contexts[2];
 static int testValue = -2;
 
-static void testFunc() {
+static void testFunc(void) {
 	char arr[100] = { 0 };
 	for (int i = 0; i < 100; i++) {
 		arr[i] = i;
