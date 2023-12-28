@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include "ContextDef.h"
+#include <stdint.h>
 
 extern int wThreadGetContext(WThreadContext*);
 extern void wThreadSetContext(const WThreadContext*);
 
-extern int wThreadSwapContext(WThreadContext* oldContext, const WThreadContext* newContext);
+extern void wThreadSwapContext(WThreadContext* oldContext, const WThreadContext* newContext);
 extern void wThreadInitContext(WThreadContext* context,
 	WThreadEntryFunc* entry, const WThreadStack* stack);
 

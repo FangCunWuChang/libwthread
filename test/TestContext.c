@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#define TEST_STACK_SIZE 128
+#define TEST_STACK_SIZE 1024 * 1024
 static WThreadContext contexts[2];
+static int testValue = -2;
 
 static void testFunc() {
 	char arr[100] = { 0 };
@@ -12,18 +13,27 @@ static void testFunc() {
 		arr[i] = i;
 	}
 
-	for (float i = 0; i < 10; i++) {
-		printf("Test Start:%d\n", (int)i);
+	for (int i = 0; i < 10; i++) {
+		printf("Test Start:%d\n", i);
+		testValue += 2;
+
 		wThreadSwapContext(&contexts[1], &contexts[0]);
-		printf("Test End:%d\n", (int)i);
+
+
+		printf("Test End:%d\n", i);
+		testValue -= 2;
 	}
 }
 
 void mainTest(float i) {
 	for (; i < 10; i++) {
 		printf("Main Start:%d\n", (int)i);
+		testValue += 3;
+
 		wThreadSwapContext(&contexts[0], &contexts[1]);
+
 		printf("Main End:%d\n", (int)i);
+		testValue -= 3;
 	}
 }
 
@@ -33,9 +43,6 @@ int main(int argc, char* argv[]) {
 		arr[i] = i;
 	}
 
-	WThreadContext c[2];
-	wThreadGetContext(&c[0]);
-
 	WThreadStack st;
 	wThreadCreateStack(&st, TEST_STACK_SIZE);
 
@@ -44,5 +51,5 @@ int main(int argc, char* argv[]) {
 	mainTest(0.f);
 
 	wThreadFreeStack(&st);
-	return 0;
+	return testValue;
 }

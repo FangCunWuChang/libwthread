@@ -54,3 +54,7 @@ target_link_libraries (test-context PRIVATE libwthread-static)
 target_compile_options (test-context PRIVATE /Od)
 set_target_properties (test-context
 	PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
+# All Tests
+enable_testing ()
+add_test (NAME "Test-Context" COMMAND $<TARGET_FILE:test-context>)

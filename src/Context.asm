@@ -36,6 +36,7 @@ wThreadSetContext PROC
     movups  xmm15, xmmword ptr [rcx + 200 + 16 * 15]
 
     mov		rsp, qword ptr [rcx + 184]
+    add     rsp, 8
     push	qword ptr [rcx + 160]           ;ret addr := new rip
 
     mov		rcx, qword ptr [rcx + 32]       ;restore rcx
@@ -82,7 +83,7 @@ wThreadGetContext PROC
 
     mov		rdi, qword ptr [rsp]            ;rip := ret addr
     mov		qword ptr [rcx + 160], rdi
-    lea		rdi, qword ptr [rsp + 8]		;rsp
+    lea		rdi, qword ptr [rsp]		    ;rsp
     mov		qword ptr [rcx + 184], rdi
     
     mov		rdi, qword ptr [rcx + 8]		;restore rdi
