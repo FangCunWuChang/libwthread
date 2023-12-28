@@ -3,8 +3,6 @@
 #include <memory.h>
 #include <malloc.h>
 
-#define STACK_SAFETY_BLOCK_SIZE 16
-
 int wThreadSwapContext(WThreadContext* oldContext, const WThreadContext* newContext) {
 	if (wThreadGetContext(oldContext) == 0) {
 		wThreadSetContext(newContext);
@@ -27,18 +25,14 @@ void wThreadInitContext(WThreadContext* context,
 }
 
 int wThreadCreateStack(WThreadStack* stack, size_t size) {
-	char* sPtr = malloc(size + STACK_SAFETY_BLOCK_SIZE * 2);
-	if (sPtr != NULL) {
-		stack->sp = sPtr + STACK_SAFETY_BLOCK_SIZE;
-		stack->size = size;
-		return size + STACK_SAFETY_BLOCK_SIZE;
-	}
-	return 0;
+	stack->sp = malloc(size);
+	stack->size = size;
+	return size;
 }
 
 void wThreadFreeStack(WThreadStack* stack) {
 	if (stack->sp != NULL) {
-		free((char*)(stack->sp) - STACK_SAFETY_BLOCK_SIZE);
+		free(stack->sp);
 		stack->sp = NULL;
 		stack->size = 0;
 	}
