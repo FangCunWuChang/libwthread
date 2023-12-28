@@ -19,7 +19,6 @@ static void testFunc() {
 
 		wThreadSwapContext(&contexts[1], &contexts[0]);
 
-
 		printf("Test End:%d\n", i);
 		testValue -= 2;
 	}

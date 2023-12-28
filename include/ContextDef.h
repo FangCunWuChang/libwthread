@@ -31,7 +31,7 @@ typedef struct {
 	uint64_t ss;		/**< +192 */
 
 	/** xmm * 16 */
-	uint64_t xmm[32];	/**< +200 ~ +240 */
+	uint64_t xmm[32];	/**< +200 ~ +440 */
 } WThreadContext;
 
 typedef struct {
