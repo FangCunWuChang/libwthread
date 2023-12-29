@@ -5,13 +5,15 @@
 
 #define TEST_STACK_SIZE 1024 * 1024
 static WThreadContext contexts[2];
-static int testValue = -2;
+static int testValue = 0;
 
-static void testFunc(void) {
+static void WTHREAD_ENTRY_CALL testFunc(void* t) {
 	char arr[100] = { 0 };
 	for (int i = 0; i < 100; i++) {
 		arr[i] = i;
 	}
+
+	testValue += (int)t;
 
 	for (int i = 0; i < 10; i++) {
 		printf("Test Start:%d\n", i);
@@ -24,7 +26,7 @@ static void testFunc(void) {
 	}
 }
 
-void mainTest(float i) {
+static void mainTest(float i) {
 	for (; i < 10; i++) {
 		printf("Main Start:%d\n", (int)i);
 		testValue += 3;
@@ -45,7 +47,7 @@ int main(int argc, char* argv[]) {
 	WThreadStack st;
 	wThreadCreateStack(&st, TEST_STACK_SIZE);
 
-	wThreadInitContext(&contexts[1], testFunc, &st);
+	wThreadInitContext(&contexts[1], testFunc, (void*)-2, &st);
 
 	mainTest(0.f);
 

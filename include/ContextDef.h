@@ -39,4 +39,6 @@ typedef struct {
 	size_t size;
 } WThreadStack;
 
-typedef void(WThreadEntryFunc)(void);
+#define WTHREAD_ENTRY_CALL _fastcall
+ 
+typedef void(WTHREAD_ENTRY_CALL WThreadEntryFunc)(void*);
