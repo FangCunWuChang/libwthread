@@ -7,7 +7,7 @@ name: Create Release
 
 jobs:
   call-build:
-    uses: ./.github/workflows/OnPush.yml@main
+    uses: ./.github/workflows/OnPush.yml
 
   release:
     name: Create Release
