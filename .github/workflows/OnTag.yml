@@ -7,7 +7,7 @@ name: Create Release
 
 jobs:
   call-build:
-    uses: ./OnPush.yml
+    uses: ./OnPush.yml@main
 
   release:
     name: Create Release
