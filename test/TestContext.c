@@ -5,7 +5,7 @@
 
 #define TEST_STACK_SIZE 1024 * 1024
 static WThreadContext contexts[2];
-static int testValue = 0;
+static uint64_t testValue = 0;
 
 static void WTHREAD_ENTRY_CALL testFunc(void* t) {
 	char arr[100] = { 0 };
@@ -13,7 +13,7 @@ static void WTHREAD_ENTRY_CALL testFunc(void* t) {
 		arr[i] = i;
 	}
 
-	testValue += (int)t;
+	testValue += (uint64_t)t;
 
 	for (int i = 0; i < 10; i++) {
 		printf("Test Start:%d\n", i);
@@ -52,5 +52,5 @@ int main(int argc, char* argv[]) {
 	mainTest(0.f);
 
 	wThreadFreeStack(&st);
-	return testValue;
+	return (int)testValue;
 }

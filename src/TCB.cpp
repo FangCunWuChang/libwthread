@@ -37,6 +37,10 @@ void WThreadTCB::sendShouldExit() {
 	this->shouldExit = true;
 }
 
+void WThreadTCB::clearShouldExit() {
+	this->shouldExit = false;
+}
+
 bool WThreadTCB::checkShouldExit() const {
 	return this->shouldExit;
 }
@@ -49,6 +53,14 @@ int WThreadTCB::getExitCode() const {
 	return this->exitCode;
 }
 
+void WThreadTCB::setWakeTime(uint64_t time) {
+	this->wakeTime = time;
+}
+
+uint64_t WThreadTCB::getWakeTime() const {
+	return this->wakeTime;
+}
+
 void WThreadTCB::statusIn() {
 	this->status = Status::Running;
 }
@@ -57,15 +69,16 @@ void WThreadTCB::statusOut(bool exit) {
 	this->status = exit ? Status::Exit : Status::Ready;
 }
 
-void WThreadTCB::jumpIn(WThreadContext& oldContext) {
-	/** Clear Should Exit Flag */
-	this->shouldExit = false;
+void WThreadTCB::statusWait() {
+	this->status = Status::Wait;
+}
 
+void WThreadTCB::jumpIn(WThreadContext& oldContext) {
 	/** Swap Context To Jump In */
 	wThreadSwapContext(&oldContext, &(this->context));
 }
 
-void WThreadTCB::jumpOut(WThreadContext& newContext, bool exit) {
+void WThreadTCB::jumpOut(WThreadContext& newContext) {
 	/** Swap Context To Jump Out */
 	wThreadSwapContext(&(this->context), &newContext);
 }

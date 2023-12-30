@@ -32,6 +32,7 @@ public:
 	std::unique_ptr<WThreadTCBNode> getId(uint64_t id);
 
 	bool empty() const;
+	bool contains(const WThreadTCB* tcb) const;
 	void clear();
 
 private:

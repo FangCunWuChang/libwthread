@@ -4,6 +4,8 @@ extern "C" {
 #include "ContextDef.h"
 }
 
+#include "Macros.hpp"
+
 #include <functional>
 #include <atomic>
 
@@ -11,9 +13,9 @@ class WThreadManager;
 
 class WThreadTCB final {
 public:
-	using ThreadFunc = std::function<int(void)>;
+	using ThreadFunc = WTHREAD_FUNC;
 	enum class Status {
-		New, Ready, Running, Exit
+		New, Ready, Running, Wait, Exit
 	};
 
 public:
@@ -28,15 +30,20 @@ public:
 	WThreadManager& getManager() const;
 
 	void sendShouldExit();
+	void clearShouldExit();
 	bool checkShouldExit() const;
 
 	void setExitCode(int code);
 	int getExitCode() const;
 
+	void setWakeTime(uint64_t time);
+	uint64_t getWakeTime() const;
+
 	void statusIn();
 	void statusOut(bool exit = false);
+	void statusWait();
 	void jumpIn(WThreadContext& oldContext);
-	void jumpOut(WThreadContext& newContext, bool exit = false);
+	void jumpOut(WThreadContext& newContext);
 
 private:
 	WThreadManager& manager;
@@ -48,6 +55,7 @@ private:
 	std::atomic<Status> status = Status::New;
 	std::atomic_bool shouldExit = false;
 	std::atomic_int exitCode = -1;
+	std::atomic_uint64_t wakeTime = 0;
 
 	static void WTHREAD_ENTRY_CALL threadEntry(void* t);
 };

@@ -53,6 +53,15 @@ bool WThreadTCBList::empty() const {
 	return !(this->root);
 }
 
+bool WThreadTCBList::contains(const WThreadTCB* tcb) const {
+	for (auto p = this->root; p; p = p->next) {
+		if (p->tcb.get() == tcb) {
+			return tcb;
+		}
+	}
+	return false;
+}
+
 void WThreadTCBList::clear() {
 	while (this->root) {
 		auto ptr = this->getFirst();

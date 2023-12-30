@@ -55,6 +55,20 @@ target_compile_options (test-context PRIVATE /Od)
 set_target_properties (test-context
 	PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
+# Test Thread
+add_executable (test-thread "test/TestThread.cpp")
+target_link_libraries (test-thread PRIVATE libwthread)
+set_target_properties (test-thread
+	PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
+# Test Exit
+add_executable (test-exit "test/TestExit.cpp")
+target_link_libraries (test-exit PRIVATE libwthread-static)
+set_target_properties (test-exit
+	PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
 # All Tests
 enable_testing ()
 add_test (NAME "Test-Context" COMMAND $<TARGET_FILE:test-context>)
+add_test (NAME "Test-Thread" COMMAND $<TARGET_FILE:test-thread>)
+add_test (NAME "Test-Exit" COMMAND $<TARGET_FILE:test-exit>)
