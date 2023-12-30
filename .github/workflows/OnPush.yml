@@ -1,0 +1,64 @@
+﻿name: OnPush
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
+        build_type: [Debug, RelWithDebInfo, Release, MinSizeRel]
+        compiler: [MSVC]
+        include:
+          - compiler: MSVC
+            c_compiler: cl
+            cxx_compiler: cl
+            asm_compiler: cl
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup Ninja
+      uses: ashutoshvarma/setup-ninja@master
+      with:
+        version: 1.11.0
+
+    - name: Initialize MSVC environment
+      if: matrix.compiler == 'MSVC'
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{runner.arch}}
+
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}
+      env:
+        CC: ${{matrix.c_compiler}}
+        CXX: ${{matrix.cxx_compiler}}
+        ASM: ${{matrix.asm_compiler}}
+      run: cmake -G "Ninja" -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -B out/build/${{runner.arch}}-${{matrix.build_type}} .
+
+    - name: Build
+      working-directory: ${{github.workspace}}
+      run: ninja -C out/build/${{runner.arch}}-${{matrix.build_type}} -j 2 all
+    
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: libwthread-${{runner.os}}-${{runner.arch}}-${{matrix.compiler}}-${{matrix.build_type}}-${{github.sha}}
+        path: |
+          include/*.h
+          include/*.hpp
+          out/build/${{runner.arch}}-${{matrix.build_type}}/bin/*.exe
+          out/build/${{runner.arch}}-${{matrix.build_type}}/bin/*.dll
+          out/build/${{runner.arch}}-${{matrix.build_type}}/lib/*.lib
+          out/build/${{runner.arch}}-${{matrix.build_type}}/bin/*.pdb
+        retention-days: 7
+        compression-level: 9

@@ -67,6 +67,14 @@ target_link_libraries (test-exit PRIVATE libwthread-static)
 set_target_properties (test-exit
 	PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
+# Output Path
+set_target_properties (libwthread libwthread-static test-context test-thread test-exit
+	PROPERTIES
+	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
 # All Tests
 enable_testing ()
 add_test (NAME "Test-Context" COMMAND $<TARGET_FILE:test-context>)
