@@ -54,11 +54,13 @@ jobs:
       with:
         name: libwthread-${{runner.os}}-${{runner.arch}}-${{matrix.compiler}}-${{matrix.build_type}}-${{github.sha}}
         path: |
-          ./*/WThread.hpp
-          ./*/Macros.hpp
-          ./out/build/${{runner.arch}}-${{matrix.build_type}}/*/*.exe
-          ./out/build/${{runner.arch}}-${{matrix.build_type}}/*/*.dll
-          ./out/build/${{runner.arch}}-${{matrix.build_type}}/*/*.lib
-          ./out/build/${{runner.arch}}-${{matrix.build_type}}/*/*.pdb
+          include/WThread.hpp
+          include/Macros.hpp
+          bin/*.exe
+          bin/*.dll
+          lib/*.lib
+          bin/*.pdb
+          LICENSE
+          README.md
         retention-days: 7
         compression-level: 9

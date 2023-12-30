@@ -36,3 +36,5 @@
 
 # Output
 [Oo]ut/**
+bin/**
+lib/**
