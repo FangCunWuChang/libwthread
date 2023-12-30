@@ -6,6 +6,9 @@
 name: Create Release
 
 jobs:
+  call-build:
+    uses: ./OnPush.yml
+
   release:
     name: Create Release
     runs-on: windows-latest
@@ -27,7 +30,7 @@ jobs:
 
   upload:
     name: Upload Release
-    needs: release
+    needs: [call-build, release]
     runs-on: ${{matrix.os}}
 
     strategy:
