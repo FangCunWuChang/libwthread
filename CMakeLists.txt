@@ -1,11 +1,8 @@
 ﻿# CMake Version
 cmake_minimum_required (VERSION 3.15)
 
-# Enable ASM
-enable_language (ASM_MASM)
-
 # Project Name
-project (libwthread VERSION 1.0.0)
+project (libwthread VERSION 1.0.0 LANGUAGES C CXX ASM_MASM)
 
 # MSVC Only
 if (NOT MSVC)
